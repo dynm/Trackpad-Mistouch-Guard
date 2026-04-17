@@ -24,7 +24,6 @@ The hardware setup is excellent, but in practice it makes it easy for a palm to 
 
 - macOS 13 or later
 - Accessibility permission
-- Input Monitoring may also be required, depending on system policy
 
 ## Run
 
@@ -32,7 +31,7 @@ The hardware setup is excellent, but in practice it makes it easy for a palm to 
 swift run
 ```
 
-The first launch will prompt for Accessibility access. If the event tap still fails, also grant Input Monitoring in `System Settings > Privacy & Security`.
+The first launch will prompt for Accessibility access.
 
 ## Releases
 
