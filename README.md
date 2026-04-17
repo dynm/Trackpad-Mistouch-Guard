@@ -40,6 +40,19 @@ GitHub Actions builds and tests the app on every push to `main` and on pull requ
 
 When you push a tag that starts with `v`, such as `v0.1.0`, the workflow also creates or updates a GitHub release and uploads a zipped `Mistouch Guard.app` bundle as a release asset.
 
+## Installing From GitHub Releases
+
+The release build is currently unsigned and not notarized. On macOS, apps downloaded from a browser usually get the `com.apple.quarantine` attribute, so Gatekeeper may block the first launch.
+
+If that happens, use one of these options:
+
+- In Finder, right-click the app and choose `Open`.
+- Remove the quarantine attribute manually:
+
+```bash
+xattr -dr com.apple.quarantine "/Applications/Mistouch Guard.app"
+```
+
 ## Notes
 
 This implementation suppresses pointer events in software rather than toggling trackpad hardware state. That keeps the app simple and avoids relying on private or unsupported system interfaces.
