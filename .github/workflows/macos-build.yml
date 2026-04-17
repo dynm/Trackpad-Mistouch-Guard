@@ -4,8 +4,13 @@ on:
   push:
     branches:
       - main
+    tags:
+      - "v*"
   pull_request:
   workflow_dispatch:
+
+permissions:
+  contents: write
 
 jobs:
   build:
@@ -36,8 +41,20 @@ jobs:
       - name: Build app bundle
         run: ./script/build_and_run.sh bundle
 
+      - name: Archive app bundle
+        run: ditto -c -k --sequesterRsrc --keepParent "dist/Mistouch Guard.app" "dist/Mistouch Guard.zip"
+
       - name: Upload app bundle
         uses: actions/upload-artifact@v4
         with:
-          name: Mistouch Guard.app
-          path: dist/Mistouch Guard.app
+          name: Mistouch Guard
+          path: dist/Mistouch Guard.zip
+
+      - name: Create or update GitHub release
+        if: startsWith(github.ref, 'refs/tags/v')
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          tag="${GITHUB_REF#refs/tags/}"
+          gh release view "$tag" >/dev/null 2>&1 || gh release create "$tag" --title "$tag" --generate-notes
+          gh release upload "$tag" "dist/Mistouch Guard.zip" --clobber

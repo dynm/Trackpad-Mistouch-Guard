@@ -34,6 +34,12 @@ swift run
 
 The first launch will prompt for Accessibility access. If the event tap still fails, also grant Input Monitoring in `System Settings > Privacy & Security`.
 
+## Releases
+
+GitHub Actions builds and tests the app on every push to `main` and on pull requests.
+
+When you push a tag that starts with `v`, such as `v0.1.0`, the workflow also creates or updates a GitHub release and uploads a zipped `Mistouch Guard.app` bundle as a release asset.
+
 ## Notes
 
 This implementation suppresses pointer events in software rather than toggling trackpad hardware state. That keeps the app simple and avoids relying on private or unsupported system interfaces.
