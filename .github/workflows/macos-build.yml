@@ -1,0 +1,43 @@
+name: macOS Build
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-15
+
+    env:
+      HOME: ${{ github.workspace }}
+      SWIFTPM_ENABLE_PLUGINS: 0
+      SWIFTPM_MODULECACHE_OVERRIDE: ${{ github.workspace }}/.cache/swift-module
+      CLANG_MODULE_CACHE_PATH: ${{ github.workspace }}/.cache/clang-module
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Prepare SwiftPM caches
+        run: mkdir -p .cache/swift-module .cache/clang-module
+
+      - name: Show toolchain
+        run: swift --version
+
+      - name: Build package
+        run: swift build
+
+      - name: Run tests
+        run: swift test
+
+      - name: Build app bundle
+        run: ./script/build_and_run.sh bundle
+
+      - name: Upload app bundle
+        uses: actions/upload-artifact@v4
+        with:
+          name: Mistouch Guard.app
+          path: dist/Mistouch Guard.app
